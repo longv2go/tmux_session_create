@@ -4,6 +4,7 @@ from json import JSONDecoder, JSONEncoder
 from pprint import pprint
 import commands
 import optparse
+import os
 
 def jsencode(p):
     return JSONEncoder().encode(p)
@@ -15,7 +16,7 @@ def parse_args():
     usage = "usage: %prog [options]"
     parser = optparse.OptionParser(usage)
 
-    parser.add_option("-c", help='The config file', action='store', dest='conf_file', default='~/.tmux.js')
+    parser.add_option("-c", help='The config file', action='store', dest='conf_file', default='~/.tcs.conf')
 
     options, args = parser.parse_args()
     return options.conf_file
@@ -76,16 +77,17 @@ class TmuxSession(object):
 
 
 def main():
-    filename = parse_args()
+    filename = os.path.expanduser(parse_args())
     file_object = open(filename)
     try:
-        all_the_text = file_object.read()
+        conf_text = file_object.read()
+    except IOError, e:
+        print 'No such file (%s)' % filename
     finally:
         file_object.close()
 
-    conf = jsdecode(all_the_text)
+    conf = jsdecode(conf_text)
     for name, sess in conf.items():
-        pprint(sess)
         _create_session(name, sess)
 
     _attach_session(name)   
