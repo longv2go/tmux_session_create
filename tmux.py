@@ -1,6 +1,9 @@
+#!/usr/bin/python 
+
 from json import JSONDecoder, JSONEncoder
 from pprint import pprint
 import commands
+import optparse
 
 _CONF_FILE = './tmux.js'
 
@@ -9,6 +12,17 @@ def jsencode(p):
 
 def jsdecode(j):
     return JSONDecoder().decode(j)
+
+def parse_args():
+    usage = "usage: %prog [options]"
+    parser = optparse.OptionParser(usage)
+
+    parser.add_option("-c", help='The config file', action='store', dest='conf_file')
+
+    options, args = parser.parse_args()
+    
+    conf_file = options.conf_file or 'tmux.js'
+    return conf_file
 
 def _excute_cmd(cmd):
     return commands.getstatusoutput(cmd)
@@ -66,11 +80,12 @@ class TmuxSession(object):
 
 
 def main():
-    file_object = open(_CONF_FILE)
+    filename = parse_args()
+    file_object = open(filename)
     try:
         all_the_text = file_object.read()
     finally:
-        file_object.close( )
+        file_object.close()
 
     conf = jsdecode(all_the_text)
     for name, sess in conf.items():
