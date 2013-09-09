@@ -5,8 +5,6 @@ from pprint import pprint
 import commands
 import optparse
 
-_CONF_FILE = './tmux.js'
-
 def jsencode(p):
     return JSONEncoder().encode(p)
 
@@ -17,7 +15,7 @@ def parse_args():
     usage = "usage: %prog [options]"
     parser = optparse.OptionParser(usage)
 
-    parser.add_option("-c", help='The config file', action='store', dest='conf_file', default='tmux.js')
+    parser.add_option("-c", help='The config file', action='store', dest='conf_file', default='~/.tmux.js')
 
     options, args = parser.parse_args()
     return options.conf_file
