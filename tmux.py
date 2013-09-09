@@ -17,12 +17,10 @@ def parse_args():
     usage = "usage: %prog [options]"
     parser = optparse.OptionParser(usage)
 
-    parser.add_option("-c", help='The config file', action='store', dest='conf_file')
+    parser.add_option("-c", help='The config file', action='store', dest='conf_file', default='tmux.js')
 
     options, args = parser.parse_args()
-    
-    conf_file = options.conf_file or 'tmux.js'
-    return conf_file
+    return options.conf_file
 
 def _excute_cmd(cmd):
     return commands.getstatusoutput(cmd)
