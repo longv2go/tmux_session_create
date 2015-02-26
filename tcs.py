@@ -1,4 +1,5 @@
 #!/usr/bin/python 
+# -*- coding: utf-8 -*-
 
 from json import JSONDecoder, JSONEncoder
 from pprint import pprint
@@ -61,6 +62,9 @@ class TmuxSession(object):
         self.windows = self.dict.get('windows')
         for win in self.windows:
             self.__create_window(win)
+
+        # 删除初始化的 window
+        sta, out = _excute_cmd("tmux kill-window -t %s:first" % self.name)
 
     def __create_window(self, win):
         #create 
